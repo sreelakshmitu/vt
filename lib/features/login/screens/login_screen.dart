@@ -22,7 +22,7 @@ class LoginScreen extends StatelessWidget {
     
     return Scaffold(
       body: BlocProvider(
-        create: (context) => LoginBloc(context),
+        create: (context) => LoginBloc(),
         child: BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
             if (state is LoginLoadingState) {
@@ -121,7 +121,7 @@ class LoginScreen extends StatelessWidget {
                 TextFormField(
                  controller: passwordController,
                  focusNode: passwordfocusnode,
-                 obscureText: true,
+                 obscureText:isObscure,
                  decoration: InputDecoration(
                  hintText: 'パスワード',
                  hintStyle: const TextStyle(color: Colors.black,fontSize: 16),
