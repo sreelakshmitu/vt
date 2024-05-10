@@ -32,3 +32,5 @@ class ValidationErrorState extends LoginState{
 
 }
 
+class UserRegistrationClickedState extends LoginState{}
+

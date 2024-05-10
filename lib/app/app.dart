@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vegtech/config/theme/colors.dart';
+import 'package:vegtech/config/colors/colors.dart';
 import 'package:vegtech/features/login/screens/login_screen.dart';
 
 class MyApp extends StatelessWidget {

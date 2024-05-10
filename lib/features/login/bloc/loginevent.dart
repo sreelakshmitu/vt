@@ -10,3 +10,5 @@ class LoginButtonClickedEvent extends LoginEvent{
 }
 
 class ToggleObscureEvent extends LoginEvent{}
+
+class RegisterButtonClickedEvent extends LoginEvent{}

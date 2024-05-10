@@ -3,10 +3,7 @@ import 'package:crypto/crypto.dart';
 import 'package:http/http.dart' as http;
 import 'dart:developer';
 
-class LoginRepo {
-  
-
-
+class RegisterRepo {
   static Future<bool> login(String username, String password) async {
     String encryptpassword = sha256.convert(utf8.encode(password)).toString();
 

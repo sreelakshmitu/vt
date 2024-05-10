@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vegtech/config/theme/colors.dart';
+import 'package:vegtech/config/colors/colors.dart';
 import 'package:vegtech/features/home/screens/homescreen.dart';
 import 'package:vegtech/features/login/bloc/loginbloc.dart';
 import 'package:vegtech/features/login/bloc/loginevent.dart';
 import 'package:vegtech/features/login/bloc/loginstate.dart';
+import 'package:vegtech/features/register/screens/registerscreen.dart';
+import 'package:vegtech/textmessages.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -26,7 +28,11 @@ class _LoginScreenState extends State<LoginScreen> {
       bloc:loginbloc,
       listener: (context, state)=>{
         if(state is LoginAuthenticatedState){
+          
           Navigator.push(context,MaterialPageRoute(builder: (context)=>const Home()))
+        }
+        else if(state is UserRegistrationClickedState){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>const RegisterUser()))
         }
       },
       builder: (context, state) {
@@ -60,9 +66,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  const Text('名前',style: TextStyle(color: primaryColor,fontWeight: FontWeight.bold,fontSize:24),),
+                  const Text(TextMessages.title,style: TextStyle(color: primaryColor,fontWeight: FontWeight.bold,fontSize:24),),
                   const SizedBox(height:20),
-                  const Text('ログイン',style: TextStyle(color: primaryColor,fontWeight:FontWeight.bold,fontSize:24)),
+                  const Text(TextMessages.login,style: TextStyle(color: primaryColor,fontWeight:FontWeight.bold,fontSize:24)),
                   const SizedBox(height:20),
                   TextFormField(
                     controller: usernameController,
@@ -73,7 +79,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       FocusScope.of(context).requestFocus(passwordfocusnode);
                     },
                     decoration: InputDecoration(
-                      hintText: 'ユーザー名',
+                      hintText: TextMessages.username,
                       hintStyle: const TextStyle(color:Colors.black,fontSize: 16),
                         enabledBorder: OutlineInputBorder(
                           borderSide: const BorderSide(color:secondaryColor),
@@ -91,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                    focusNode: passwordfocusnode,
                    obscureText:isobscure,
                    decoration: InputDecoration(
-                   hintText: 'パスワード',
+                   hintText: TextMessages.password,
                    hintStyle: const TextStyle(color: Colors.black,fontSize: 16),
                    suffixIcon: IconButton(
                       icon: Icon(isobscure ? Icons.visibility_off: Icons.visibility),
@@ -104,7 +110,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderSide: const BorderSide(color:secondaryColor)
                   ),
                  ),
-                  ),
+                  textInputAction: TextInputAction.done,
+                  
+               ),
                   const SizedBox(height: 20.0),
                   ElevatedButton(
                     style: ButtonStyle(
@@ -121,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                        loginbloc.add(LoginButtonClickedEvent(username: usernameController.text, password: passwordController.text));
                       
                       },
-                    child: const Text('ログイン',style:TextStyle(color:Colors.white,fontSize: 16)),
+                    child: const Text(TextMessages.login,style:TextStyle(color:Colors.white,fontSize: 16)),
                   ),
                   const SizedBox(height:20),
                   ElevatedButton(
@@ -135,10 +143,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         backgroundColor: MaterialStateProperty.all<Color>(primaryColor),
                       ), 
                     onPressed: () {
-                      
+                      loginbloc.add(RegisterButtonClickedEvent());
                     },
-                    child: const Text('新しいユーザーを作成する',style:TextStyle(color:Colors.white,fontSize: 16)),
+                    child: const Text(TextMessages.registernewuser,style:TextStyle(color:Colors.white,fontSize: 16)),
                   ),
+                  const SizedBox(height:20),
                   if (errorMessage.isNotEmpty)
                     Text(
                       errorMessage,
