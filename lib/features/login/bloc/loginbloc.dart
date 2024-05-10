@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import '../../../errormessages.dart';
 import 'package:bloc/bloc.dart';
 import 'package:vegtech/features/login/bloc/loginevent.dart';
 import 'package:vegtech/features/login/bloc/loginstate.dart';
@@ -21,20 +21,20 @@ class LoginBloc extends Bloc<LoginEvent,LoginState>{
   FutureOr<void> loginbuttonclickedevent(LoginButtonClickedEvent event, Emitter<LoginState> emit) async{
 
     if (event.username.isEmpty && event.password.isEmpty) {
-        emit(ValidationErrorState(errormessage: '正しい資格情報を入力してください'));
+        emit(ValidationErrorState(errormessage:ErrorMessages.emptyCredentials));
       } else if (event.username.isEmpty) {
-        emit(ValidationErrorState(errormessage: 'ユーザー名を空にすることはできません'));
+        emit(ValidationErrorState(errormessage:ErrorMessages.emptyUsername));
       } else if (event.password.isEmpty) {
-        emit(ValidationErrorState(errormessage: 'パスワードを空にすることはできません'));
+        emit(ValidationErrorState(errormessage:ErrorMessages.emptyPassword));
       } else if (event.password.length < 8) {
-        emit(ValidationErrorState(errormessage: 'パスワードは8文字以上である必要があります'));
+        emit(ValidationErrorState(errormessage:ErrorMessages.shortPassword));
       } else{
         emit(LoginLoadingState());
         bool success = await LoginRepo.login(event.username, event.password);
         if (success) {
         emit(LoginAuthenticatedState());
       } else {
-        emit(LoginUnAuthenticatedState(errormessage: 'ユーザー名かパスワードが無効'));
+        emit(LoginUnAuthenticatedState(errormessage:ErrorMessages.invalidCredentials));
       }
       }
     

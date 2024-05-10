@@ -23,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer(
+      bloc:loginbloc,
       listener: (context, state)=>{
         if(state is LoginAuthenticatedState){
           Navigator.push(context,MaterialPageRoute(builder: (context)=>const Home()))
@@ -93,7 +94,7 @@ class _LoginScreenState extends State<LoginScreen> {
                    hintText: 'パスワード',
                    hintStyle: const TextStyle(color: Colors.black,fontSize: 16),
                    suffixIcon: IconButton(
-                      icon: Icon(isobscure ? Icons.visibility : Icons.visibility_off),
+                      icon: Icon(isobscure ? Icons.visibility_off: Icons.visibility),
                       onPressed: () {
                         loginbloc.add(ToggleObscureEvent());
                       },
