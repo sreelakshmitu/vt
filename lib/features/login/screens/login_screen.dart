@@ -111,6 +111,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                  ),
                   textInputAction: TextInputAction.done,
+                  onFieldSubmitted: (_) {
+                  loginbloc.add(LoginButtonClickedEvent(username: usernameController.text, password: passwordController.text));
+                 },
                   
                ),
                   const SizedBox(height: 20.0),
