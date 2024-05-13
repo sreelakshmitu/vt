@@ -12,8 +12,11 @@ class LoginBloc extends Bloc<LoginEvent,LoginState>{
 
   bool _isObscure=true;
   
+  // final SharedPreferences prefs;
+
 
   LoginBloc():super(LoginInitialState()){
+   
    on<LoginButtonClickedEvent>(loginbuttonclickedevent);
    on<ToggleObscureEvent>(toggleobscureevent);
    on<RegisterButtonClickedEvent>(registerbuttonclickedevent);
@@ -22,6 +25,8 @@ class LoginBloc extends Bloc<LoginEvent,LoginState>{
   
 
   FutureOr<void> loginbuttonclickedevent(LoginButtonClickedEvent event, Emitter<LoginState> emit) async{
+
+  
 
     if (event.username.isEmpty && event.password.isEmpty) {
         emit(ValidationErrorState(errormessage:TextMessages.emptyCredentials));
@@ -35,6 +40,7 @@ class LoginBloc extends Bloc<LoginEvent,LoginState>{
         emit(LoginLoadingState());
         bool success = await LoginRepo.login(event.username, event.password);
         if (success) {
+        // prefs.setBool('isLoggesIn', true);
         emit(LoginAuthenticatedState());
       } else {
         emit(LoginUnAuthenticatedState(errormessage:TextMessages.invalidCredentials));

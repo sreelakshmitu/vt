@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vegtech/config/colors/colors.dart';
-import 'package:vegtech/features/home/screens/homescreen.dart';
+import 'package:vegtech/features/Inputscreen1/screens/inputscreen1.dart';
 import 'package:vegtech/features/login/bloc/loginbloc.dart';
 import 'package:vegtech/features/login/bloc/loginevent.dart';
 import 'package:vegtech/features/login/bloc/loginstate.dart';
@@ -22,17 +22,32 @@ class _LoginScreenState extends State<LoginScreen> {
   final FocusNode passwordfocusnode=FocusNode();
   final GlobalKey<FormState>_formKey=GlobalKey<FormState>();
   final LoginBloc loginbloc=LoginBloc();
+
+  // @override
+  // void initState() {
+  
+  //   super.initState();
+  //   _initPrefsAndBloc();
+  // }
+  // // Future<void> _initPrefsAndBloc() async{
+  //   pref=await SharedPreferences.getInstance();
+  //   loginbloc=LoginBloc(prefs: pref);
+  // }
+  
   @override
   Widget build(BuildContext context) {
+    
     return BlocConsumer(
       bloc:loginbloc,
       listener: (context, state)=>{
         if(state is LoginAuthenticatedState){
           
-          Navigator.push(context,MaterialPageRoute(builder: (context)=>const Home()))
+          Navigator.push(context,MaterialPageRoute(builder: (context)=>const Home())),
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(TextMessages.loginsuccessful), duration: Duration(seconds:3),))
         }
         else if(state is UserRegistrationClickedState){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>const RegisterUser()))
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>const RegisterUser())),
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text(TextMessages.userregistrationsuccessful),duration:Duration(seconds:3)))
         }
       },
       builder: (context, state) {
@@ -53,116 +68,123 @@ class _LoginScreenState extends State<LoginScreen> {
       );
   }
   Widget _buildLoginForm(BuildContext context, String errorMessage , bool isobscure) {
-  
-   return Scaffold(
-        body:Center(
-        child: Container(
-          constraints: const BoxConstraints(maxWidth:400),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              key:_formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  const Text(TextMessages.title,style: TextStyle(color: primaryColor,fontWeight: FontWeight.bold,fontSize:24),),
-                  const SizedBox(height:20),
-                  const Text(TextMessages.login,style: TextStyle(color: primaryColor,fontWeight:FontWeight.bold,fontSize:24)),
-                  const SizedBox(height:20),
-                  TextFormField(
-                    controller: usernameController,
-                    focusNode: usernamefocusnode,
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (String value){
-                      usernamefocusnode.unfocus();
-                      FocusScope.of(context).requestFocus(passwordfocusnode);
-                    },
-                    decoration: InputDecoration(
-                      hintText: TextMessages.username,
-                      hintStyle: const TextStyle(color:Colors.black,fontSize: 16),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(color:secondaryColor),
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color:secondaryColor.withOpacity(0.5)),
-                          borderRadius: BorderRadius.circular(8),
-                        ) 
-                    ),
-                  ),
-                  const SizedBox(height: 20.0),
-                  TextFormField(
-                   controller: passwordController,
-                   focusNode: passwordfocusnode,
-                   obscureText:isobscure,
-                   decoration: InputDecoration(
-                   hintText: TextMessages.password,
-                   hintStyle: const TextStyle(color: Colors.black,fontSize: 16),
-                   suffixIcon: IconButton(
-                      icon: Icon(isobscure ? Icons.visibility_off: Icons.visibility),
-                      onPressed: () {
-                        loginbloc.add(ToggleObscureEvent());
+    final Size size = MediaQuery.of(context).size;
+    final bool isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+    return Scaffold(
+        body:SafeArea(
+          child: Center(
+          child: Container(
+            width: isLandscape ? size.width * 0.6 : size.width * 0.8,
+            height: isLandscape ? size.height * 0.6 : size.height * 0.8,
+            constraints: const BoxConstraints(maxWidth:400),
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Form(
+                key:_formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    const Text(TextMessages.title,style: TextStyle(color: primaryColor,fontWeight: FontWeight.bold,fontSize:24),),
+                    const SizedBox(height:20),
+                    const Text(TextMessages.login,style: TextStyle(color: primaryColor,fontWeight:FontWeight.bold,fontSize:24)),
+                    const SizedBox(height:20),
+                    TextFormField(
+                      controller: usernameController,
+                      focusNode: usernamefocusnode,
+                      textInputAction: TextInputAction.next,
+                      onFieldSubmitted: (String value){
+                        usernamefocusnode.unfocus();
+                        FocusScope.of(context).requestFocus(passwordfocusnode);
                       },
+                      decoration: InputDecoration(
+                        hintText: TextMessages.username,
+                        hintStyle: const TextStyle(color:Colors.black,fontSize: 16),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide: const BorderSide(color:secondaryColor),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color:secondaryColor.withOpacity(0.5)),
+                            borderRadius: BorderRadius.circular(8),
+                          ) 
+                      ),
+                    ),
+                    const SizedBox(height: 20.0),
+                    TextFormField(
+                     controller: passwordController,
+                     focusNode: passwordfocusnode,
+                     obscureText:isobscure,
+                     decoration: InputDecoration(
+                     hintText: TextMessages.password,
+                     hintStyle: const TextStyle(color: Colors.black,fontSize: 16),
+                     suffixIcon: IconButton(
+                        icon: Icon(isobscure ? Icons.visibility_off: Icons.visibility),
+                        onPressed: () {
+                          loginbloc.add(ToggleObscureEvent());
+                        },
+                     ),
+                    border:OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: const BorderSide(color:secondaryColor)
+                    ),
                    ),
-                  border:OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(8.0),
-                  borderSide: const BorderSide(color:secondaryColor)
-                  ),
+                    textInputAction: TextInputAction.done,
+                    onFieldSubmitted: (_) {
+                    loginbloc.add(LoginButtonClickedEvent(username: usernameController.text, password: passwordController.text));
+                   },
+                    
                  ),
-                  textInputAction: TextInputAction.done,
-                  onFieldSubmitted: (_) {
-                  loginbloc.add(LoginButtonClickedEvent(username: usernameController.text, password: passwordController.text));
-                 },
-                  
-               ),
-                  const SizedBox(height: 20.0),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                        shape:MaterialStateProperty.all<RoundedRectangleBorder>(
-                         RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                         )
-                        ),
-                        minimumSize: MaterialStateProperty.all(const Size(200.0,50.0)),
-                        backgroundColor: MaterialStateProperty.all<Color>(primaryColor),
-                      ), 
-                    onPressed: () {
-                       
-                       loginbloc.add(LoginButtonClickedEvent(username: usernameController.text, password: passwordController.text));
-                      
-                      },
-                    child: const Text(TextMessages.login,style:TextStyle(color:Colors.white,fontSize: 16)),
-                  ),
-                  const SizedBox(height:20),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                        shape:MaterialStateProperty.all<RoundedRectangleBorder>(
-                         RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                         )
-                        ),
-                        minimumSize: MaterialStateProperty.all(const Size(200.0,50.0)),
-                        backgroundColor: MaterialStateProperty.all<Color>(primaryColor),
-                      ), 
-                    onPressed: () {
-                      loginbloc.add(RegisterButtonClickedEvent());
-                    },
-                    child: const Text(TextMessages.registernewuser,style:TextStyle(color:Colors.white,fontSize: 16)),
-                  ),
-                  const SizedBox(height:20),
-                  if (errorMessage.isNotEmpty)
-                    Text(
-                      errorMessage,
-                      style: const TextStyle(color: Colors.red),
+                    const SizedBox(height: 20.0),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          shape:MaterialStateProperty.all<RoundedRectangleBorder>(
+                           RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                           )
+                          ),
+                          minimumSize: MaterialStateProperty.all(const Size(200.0,50.0)),
+                          backgroundColor: MaterialStateProperty.all<Color>(primaryColor),
+                        ), 
+                      onPressed: () {
+                         
+                         loginbloc.add(LoginButtonClickedEvent(username: usernameController.text, password: passwordController.text));
+                        
+                        },
+                      child: const Text(TextMessages.login,style:TextStyle(color:Colors.white,fontSize: 16)),
                     ),
-                ],
+                    const SizedBox(height:20),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                          shape:MaterialStateProperty.all<RoundedRectangleBorder>(
+                           RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                           )
+                          ),
+                          minimumSize: MaterialStateProperty.all(const Size(200.0,50.0)),
+                          backgroundColor: MaterialStateProperty.all<Color>(primaryColor),
+                        ), 
+                      onPressed: () {
+                        loginbloc.add(RegisterButtonClickedEvent());
+                      },
+                      child: const Text(TextMessages.registernewuser,style:TextStyle(color:Colors.white,fontSize: 16)),
+                    ),
+                    const SizedBox(height:20),
+                    if (errorMessage.isNotEmpty)
+                      Text(
+                        errorMessage,
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
+          ),
         ),
       );
 }
+
+ 
     
 }

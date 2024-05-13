@@ -9,6 +9,8 @@ class TextMessages {
   static const String invalidCredentials = 'ユーザー名かパスワードが無効';
   static const String genericerror='エラーが発生した';
   static const String passwordmismatch='パスワードが一致しません';
+  static const String loginsuccessful='ログイン成功';
+  static const String userregistrationsuccessful='ユーザー登録が成功しました';
 
   //hinttexts
   static const String title='名前';
